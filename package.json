@@ -12,7 +12,6 @@
   "author": "Jordan Kelly",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
