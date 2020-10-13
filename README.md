@@ -1,14 +1,10 @@
 # Fundamentals of webdev
 A project focused on learning the fundamentals of webdev.
 
-1. 
-  - Javascript Fundamentals
-2. 
-  - Rest Fundamentals
-3. 
-  - Graphql Fundamentals
-4. 
-  - Typescript Fundamentals
+1. Javascript Fundamentals
+2. Rest Fundamentals
+3. Graphql Fundamentals
+4. Typescript Fundamentals
 
 # Documentation
 
