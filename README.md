@@ -1,6 +1,10 @@
 # Fundamentals of webdev
 A project focused on learning the fundamentals of webdev.
 
+# Documentation
+
+## Getting Started
+
 ### Install Dependencies
 ```
 npm install
