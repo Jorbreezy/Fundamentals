@@ -9,7 +9,7 @@ A project focused on learning the fundamentals of webdev.
 ```
 npm install
 ``` 
-### Command to run dev server
+### Run dev server
 ```
 npm run dev
 ``` 
@@ -17,7 +17,6 @@ npm run dev
 ```
 npm run build
 ```
-
 ### Run build server
 ```
 npm start
