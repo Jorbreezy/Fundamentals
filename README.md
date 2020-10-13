@@ -1,5 +1,5 @@
-# Fundamentals
-This a project focused on learning the fundamentals of webdev
+# Fundamentals of webdev
+A project focused on learning the fundamentals of webdev.
 
 ### Install Dependencies
 ```
