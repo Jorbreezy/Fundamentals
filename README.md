@@ -43,18 +43,3 @@ The types of sorts available are "New, Best, Relevance, Hot and Comments".
 ```
 searchRedditPostsByTopic('Gaming')
 ```
-
-### Fields
-The function returns multiple fields such as  id, title, author, subreddit, thumbnail, url, ups, and downs.
-```
-{
-   id,
-   title,
-   author,
-   subreddit,
-   thumbnail,
-   url,
-   ups,
-   downs,
-}
-```
