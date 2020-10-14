@@ -24,7 +24,7 @@ npm start
 This is a function that allows you to search for posts related to the topic given e.g 'Gaming, Programming, etc'.
 
 ### Arguments
-The function takes two arguements, topic and sort. When sort isn't given it defaults to 'new', sorting all posts from the newest to the oldest.
+The function takes two arguments, topic and sort. When sort isn't given it defaults to 'new', sorting all posts from the newest to the oldest.
 The types of sorts available are "New, Best, Relevance, Hot".
 
 ### Fields
