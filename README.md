@@ -27,15 +27,21 @@ This is a function that allows you to search for posts related to the topic give
 Just import or require the file where you need it. It defaults to the function.
 
 ```
-import redditTopicSearch from 'redditSearchTopics';
+import searchRedditPostsByTopic from 'searchRedditPostsByTopic';
+
+or
+
+const searchRedditPostsByTopic = require('searchRedditPostsByTopic');
+
+searchRedditPostsByTopic('Gaming','Best');
 ```
 
 ### Arguments
 The function takes two arguments, topic and sort. When sort isn't given it defaults to 'new', sorting all posts from the newest to the oldest.
-The types of sorts available are "New, Best, Relevance, Hot".
+The types of sorts available are "New, Best, Relevance, Hot and Comments".
 
 ```
-redditSearchTopics('Gaming')
+searchRedditPostsByTopic('Gaming')
 ```
 
 ### Fields
