@@ -22,12 +22,13 @@ npm run build
 npm start
 ```
 
-## Using the function
+## Search reddit Posts
+This is a function that allows you to search for posts related to the topic given e.g 'Gaming, Programming, etc'.
 
-## Initiate
+### Initiate
 In order to use the function all you have to do is import/require it into your file.
 
-## Arguments
+### Arguments
 The function takes two arguements, topic and sort. When sort isn't given it defaults to 'new', sorting all posts from the newest to the oldest.
 The types of sorts available are "New, Best, Relevance, Hot"
 
