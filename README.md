@@ -21,7 +21,7 @@ npm start
 ```
 
 ## Reddit Posts search function
-This is a function that allows you to search for posts related to the topic given e.g 'Gaming, Programming, etc'.
+This is a function that allows you to search for posts related to the topic given e.g 'Gaming, Programming, etc'. The output of it is a JSON file which saves the data from your search.
 
 ### How to use
 Just import or require the file where you need it. It defaults to the function.
