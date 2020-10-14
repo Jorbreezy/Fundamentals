@@ -21,3 +21,13 @@ npm run build
 ```
 npm start
 ```
+
+## Using the function
+
+## Initiate
+In order to use the function all you have to do is import/require it into your file.
+
+## Arguments
+The function takes two arguements, topic and sort. When sort isn't given it defaults to 'new', sorting all posts from the newest to the oldest.
+The types of sorts available are "New, Best, Relevance, Hot"
+
