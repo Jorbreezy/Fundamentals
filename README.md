@@ -33,13 +33,13 @@ or
 
 const searchRedditPostsByTopic = require('searchRedditPostsByTopic');
 
-searchRedditPostsByTopic('Gaming','Best');
+searchRedditPostsByTopic('Gaming', ['thumbnail','id'], 'Best');
 ```
 
 ### Arguments
-The function takes two arguments, topic and sort. When sort isn't given it defaults to 'new', sorting all posts from the newest to the oldest.
+The function takes three arguments, topic, fields, and sort. Field is an array of string that contain's any of the fields you want. When fields isn't given it defaults to an empty array returning everything from the request. When sort isn't given it defaults to 'new', sorting all posts from the newest to the oldest. 
 The types of sorts available are "New, Best, Relevance, Hot and Comments".
 
 ```
-searchRedditPostsByTopic('Gaming')
+searchRedditPostsByTopic('Gaming', ['thumbnail','id'])
 ```
