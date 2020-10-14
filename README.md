@@ -1,6 +1,8 @@
 # Project 1
 A project focused on learning the fundamentals of js and node.
 
+This contains a Reddit posts search function
+
 # Documentation
 
 ## Getting Started
@@ -9,15 +11,11 @@ A project focused on learning the fundamentals of js and node.
 ```
 npm install
 ``` 
-### Run dev server
-```
-npm run dev
-``` 
-### build project
+### Build project
 ```
 npm run build
 ```
-### Run build server
+### Run build
 ```
 npm start
 ```
@@ -30,8 +28,8 @@ In order to use the function all you have to do is import/require it into your f
 
 ### Arguments
 The function takes two arguements, topic and sort. When sort isn't given it defaults to 'new', sorting all posts from the newest to the oldest.
-The types of sorts available are "New, Best, Relevance, Hot"
+The types of sorts available are "New, Best, Relevance, Hot".
 
 ### Fields
-The function returns multiple fields such as  id, title, author, subreddit, thumbnail, url, ups, downs
+The function returns multiple fields such as  id, title, author, subreddit, thumbnail, url, ups, and downs.
 
