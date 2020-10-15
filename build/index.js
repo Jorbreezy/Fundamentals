@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.searchRedditPostsByTopicAsync = exports.searchRedditPostsByTopicPromise = void 0;
+exports.searchRedditPostsByTopicPromise = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -26,9 +26,7 @@ var searchRedditPostsByTopicPromise = function searchRedditPostsByTopicPromise(t
     var _res$data;
 
     var posts = (res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.children) || [];
-    return specifyFields(posts, fields);
-  }).then(function (posts) {
-    return _fs.promises.writeFile('data.json', JSON.stringify(posts, null, '\t'));
+    specifyFields(posts, fields);
   }).then(function () {
     return 'Saved Successfully!';
   })["catch"](function (err) {
@@ -43,13 +41,9 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
     var fields,
         sort,
         redditUrl,
-        _results$data,
         res,
         results,
-        data,
-        posts,
         _args = arguments;
-
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -77,26 +71,21 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
 
           case 11:
             results = _context.sent;
-            data = (results === null || results === void 0 ? void 0 : (_results$data = results.data) === null || _results$data === void 0 ? void 0 : _results$data.children) || [];
-            posts = specifyFields(data, fields);
-
-            _fs.promises.writeFile('data.json', JSON.stringify(posts, null, '\t'));
-
-            console.log('Saved Sucessfully');
-            _context.next = 21;
+            specifyFields(results, fields);
+            _context.next = 18;
             break;
 
-          case 18:
-            _context.prev = 18;
+          case 15:
+            _context.prev = 15;
             _context.t0 = _context["catch"](5);
             console.error(_context.t0);
 
-          case 21:
+          case 18:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[5, 18]]);
+    }, _callee, null, [[5, 15]]);
   }));
 
   return function searchRedditPostsByTopicAsync(_x) {
@@ -104,17 +93,22 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
   };
 }();
 
-exports.searchRedditPostsByTopicAsync = searchRedditPostsByTopicAsync;
+var specifyFields = function specifyFields(res, fields) {
+  var _results$data;
 
-var specifyFields = function specifyFields(posts, fields) {
   if (!fields.length || !fields) return posts;
-  return posts.map(function (post) {
+  var results = (results === null || results === void 0 ? void 0 : (_results$data = results.data) === null || _results$data === void 0 ? void 0 : _results$data.children) || [];
+  var posts = results.map(function (post) {
     return fields.reduce(function (acc, field) {
-      if ((post === null || post === void 0 ? void 0 : post.data[field]) !== undefined) {
+      if ((results === null || results === void 0 ? void 0 : results.data[field]) !== undefined) {
         acc[field] = post === null || post === void 0 ? void 0 : post.data[field];
       }
 
       return acc;
     }, {});
   });
+
+  _fs.promises.writeFile('data.json', JSON.stringify(posts, null, '\t'));
 };
+
+searchRedditPostsByTopicAsync('Gaming', ['id', 'thumbnail'], 'Best');
