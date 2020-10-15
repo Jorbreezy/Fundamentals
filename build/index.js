@@ -2,6 +2,11 @@
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.searchRedditPostsByTopicAsync = exports.searchRedditPostsByTopicPromise = void 0;
+
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
@@ -13,7 +18,7 @@ var _fs = require("fs");
 var searchRedditPostsByTopicPromise = function searchRedditPostsByTopicPromise(topic) {
   var fields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   var sort = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "new";
-  if (!topic) return;
+  if (!topic || typeof topic !== 'string') return new Error('Topic not given and or not a string!');
   var redditUrl = "https://www.reddit.com/r/pics/search.json?q=".concat(topic, "&sort=").concat(sort);
   (0, _nodeFetch["default"])(redditUrl).then(function (res) {
     return res.json();
@@ -25,11 +30,13 @@ var searchRedditPostsByTopicPromise = function searchRedditPostsByTopicPromise(t
   }).then(function (posts) {
     return _fs.promises.writeFile('data.json', JSON.stringify(posts, null, '\t'));
   }).then(function () {
-    return console.log('Saved Successfully!');
+    return 'Saved Successfully!';
   })["catch"](function (err) {
     return console.error(err);
   });
 };
+
+exports.searchRedditPostsByTopicPromise = searchRedditPostsByTopicPromise;
 
 var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(topic) {
@@ -50,12 +57,12 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
             fields = _args.length > 1 && _args[1] !== undefined ? _args[1] : [];
             sort = _args.length > 2 && _args[2] !== undefined ? _args[2] : "new";
 
-            if (topic) {
+            if (!(!topic && typeof topic !== 'string')) {
               _context.next = 4;
               break;
             }
 
-            return _context.abrupt("return");
+            return _context.abrupt("return", new Error('Topic not given!'));
 
           case 4:
             redditUrl = "https://www.reddit.com/r/pics/search.json?q=".concat(topic, "&sort=").concat(sort);
@@ -97,12 +104,12 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
   };
 }();
 
+exports.searchRedditPostsByTopicAsync = searchRedditPostsByTopicAsync;
+
 var specifyFields = function specifyFields(posts, fields) {
   if (!fields.length || !fields) return posts;
   return posts.map(function (post) {
     return fields.reduce(function (acc, field) {
-      console.log(post === null || post === void 0 ? void 0 : post.data[field]);
-
       if ((post === null || post === void 0 ? void 0 : post.data[field]) !== undefined) {
         acc[field] = post === null || post === void 0 ? void 0 : post.data[field];
       }
@@ -111,5 +118,3 @@ var specifyFields = function specifyFields(posts, fields) {
     }, {});
   });
 };
-
-searchRedditPostsByTopicAsync('Gaming', ['thumbnail', 'title', 'id']);
