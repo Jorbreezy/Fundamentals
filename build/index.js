@@ -5,7 +5,9 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.searchRedditPostsByTopicPromise = void 0;
+exports.saveResults = exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchData = exports.searchRedditPostsByTopicAsync = exports.searchRedditPostsByTopicPromise = void 0;
+
+var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -13,24 +15,19 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 
-var _fs = require("fs");
+var _fs = _interopRequireDefault(require("fs"));
 
+// Set the fetch -> json into a helper function instead of repeating them
 var searchRedditPostsByTopicPromise = function searchRedditPostsByTopicPromise(topic) {
   var fields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   var sort = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "new";
-  if (!topic || typeof topic !== 'string') return new Error('Topic not given and or not a string!');
-  var redditUrl = "https://www.reddit.com/r/pics/search.json?q=".concat(topic, "&sort=").concat(sort);
-  (0, _nodeFetch["default"])(redditUrl).then(function (res) {
-    return res.json();
-  }).then(function (res) {
-    var _res$data;
-
-    var posts = (res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.children) || [];
-    specifyFields(posts, fields);
-  }).then(function () {
-    return 'Saved Successfully!';
+  var url = getRedditUrl(topic, sort);
+  fetchData(url).then(function (res) {
+    return processData(res, fields);
+  }).then(function (posts) {
+    return saveResults('data.json', posts);
   })["catch"](function (err) {
-    return console.error(err);
+    return console.error('Error: ', err);
   });
 };
 
@@ -40,9 +37,9 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(topic) {
     var fields,
         sort,
-        redditUrl,
-        res,
-        results,
+        url,
+        data,
+        posts,
         _args = arguments;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -50,65 +47,92 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
           case 0:
             fields = _args.length > 1 && _args[1] !== undefined ? _args[1] : [];
             sort = _args.length > 2 && _args[2] !== undefined ? _args[2] : "new";
+            url = getRedditUrl(topic, sort);
+            _context.prev = 3;
+            _context.next = 6;
+            return fetchData(url);
 
-            if (!(!topic && typeof topic !== 'string')) {
-              _context.next = 4;
-              break;
-            }
-
-            return _context.abrupt("return", new Error('Topic not given!'));
-
-          case 4:
-            redditUrl = "https://www.reddit.com/r/pics/search.json?q=".concat(topic, "&sort=").concat(sort);
-            _context.prev = 5;
-            _context.next = 8;
-            return (0, _nodeFetch["default"])(redditUrl);
-
-          case 8:
-            res = _context.sent;
-            _context.next = 11;
-            return res.json();
-
-          case 11:
-            results = _context.sent;
-            specifyFields(results, fields);
-            _context.next = 18;
+          case 6:
+            data = _context.sent;
+            posts = processData(data, fields);
+            saveResults('data.json', posts);
+            _context.next = 14;
             break;
 
-          case 15:
-            _context.prev = 15;
-            _context.t0 = _context["catch"](5);
+          case 11:
+            _context.prev = 11;
+            _context.t0 = _context["catch"](3);
             console.error(_context.t0);
 
-          case 18:
+          case 14:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[5, 15]]);
+    }, _callee, null, [[3, 11]]);
   }));
 
   return function searchRedditPostsByTopicAsync(_x) {
     return _ref.apply(this, arguments);
   };
-}();
+}(); // Pass all the data into specify fields
+// Extract Fields
+// Allow it to be specific to an array of objects
+// Could add a function Process data and use specify/extract fields in it
+// In process data do we want it allow the developer to choose what 
 
-var specifyFields = function specifyFields(res, fields) {
-  var _results$data;
 
-  if (!fields.length || !fields) return posts;
-  var results = (results === null || results === void 0 ? void 0 : (_results$data = results.data) === null || _results$data === void 0 ? void 0 : _results$data.children) || [];
-  var posts = results.map(function (post) {
-    return fields.reduce(function (acc, field) {
-      if ((results === null || results === void 0 ? void 0 : results.data[field]) !== undefined) {
-        acc[field] = post === null || post === void 0 ? void 0 : post.data[field];
-      }
+exports.searchRedditPostsByTopicAsync = searchRedditPostsByTopicAsync;
 
-      return acc;
-    }, {});
+var fetchData = function fetchData(url) {
+  return (0, _nodeFetch["default"])(url).then(function (res) {
+    return res.json();
+  })["catch"](function (err) {
+    return console.error(err);
   });
-
-  _fs.promises.writeFile('data.json', JSON.stringify(posts, null, '\t'));
 };
 
-searchRedditPostsByTopicAsync('Gaming', ['id', 'thumbnail'], 'Best');
+exports.fetchData = fetchData;
+
+var processData = function processData(res, fields) {
+  var _res$data;
+
+  var data = (res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.children) || [];
+  return extractFields(data, fields);
+};
+
+exports.processData = processData;
+
+var extractFields = function extractFields(data, fields) {
+  if (!fields.length || !fields) return data;
+  return data.map(function (obj) {
+    if ((0, _typeof2["default"])(obj) === 'object') {
+      return fields.reduce(function (acc, field) {
+        if ((obj === null || obj === void 0 ? void 0 : obj.data[field]) !== undefined) {
+          acc[field] = obj === null || obj === void 0 ? void 0 : obj.data[field];
+        }
+
+        return acc;
+      }, {});
+    }
+  });
+};
+
+exports.extractFields = extractFields;
+
+var getRedditUrl = function getRedditUrl(topic) {
+  var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "new";
+  if (!topic && typeof topic !== 'string') return new Error('Topic not a string!');
+  if (typeof sort !== 'string') return new Error('Sort is not a string!');
+  return "https://www.reddit.com/r/pics/search.json?q=".concat(topic, "&sort=").concat(sort);
+};
+
+exports.getRedditUrl = getRedditUrl;
+
+var saveResults = function saveResults(filename, data) {
+  _fs["default"].writeFileSync(filename, JSON.stringify(data, null, '\t'));
+
+  console.log('Saved Successfully!');
+};
+
+exports.saveResults = saveResults;
