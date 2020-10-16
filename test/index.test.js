@@ -1,7 +1,10 @@
-const { searchRedditPostsByTopicPromise } = require('../build/index');
 const fs = require('fs');
 const path = require('path');
+
 const fetch = require('node-fetch');
+
+const { searchRedditPostsByTopicPromise } = require('../build/index');
+
 
 jest.mock('node-fetch');
 
