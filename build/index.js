@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.saveResults = exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchData = exports.searchRedditPostsByTopicAsync = exports.searchRedditPostsByTopicPromise = void 0;
+exports.writeJsonFile = exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJsonData = exports.searchRedditPostsByTopicAsync = exports.searchRedditPostsByTopicPromise = void 0;
 
 var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
@@ -22,10 +22,10 @@ var searchRedditPostsByTopicPromise = function searchRedditPostsByTopicPromise(t
   var fields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   var sort = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "new";
   var url = getRedditUrl(topic, sort);
-  fetchData(url).then(function (res) {
+  fetchJsonData(url).then(function (res) {
     return processData(res, fields);
   }).then(function (posts) {
-    return saveResults('data.json', posts);
+    return writeJsonFile('data.json', posts);
   })["catch"](function (err) {
     return console.error('Error: ', err);
   });
@@ -50,12 +50,12 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
             url = getRedditUrl(topic, sort);
             _context.prev = 3;
             _context.next = 6;
-            return fetchData(url);
+            return fetchJsonData(url);
 
           case 6:
             data = _context.sent;
             posts = processData(data, fields);
-            saveResults('data.json', posts);
+            writeJsonFile('data.json', posts);
             _context.next = 14;
             break;
 
@@ -79,12 +79,11 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
 // Extract Fields
 // Allow it to be specific to an array of objects
 // Could add a function Process data and use specify/extract fields in it
-// In process data do we want it allow the developer to choose what 
 
 
 exports.searchRedditPostsByTopicAsync = searchRedditPostsByTopicAsync;
 
-var fetchData = function fetchData(url) {
+var fetchJsonData = function fetchJsonData(url) {
   return (0, _nodeFetch["default"])(url).then(function (res) {
     return res.json();
   })["catch"](function (err) {
@@ -92,7 +91,7 @@ var fetchData = function fetchData(url) {
   });
 };
 
-exports.fetchData = fetchData;
+exports.fetchJsonData = fetchJsonData;
 
 var processData = function processData(res, fields) {
   var _res$data;
@@ -129,10 +128,10 @@ var getRedditUrl = function getRedditUrl(topic) {
 
 exports.getRedditUrl = getRedditUrl;
 
-var saveResults = function saveResults(filename, data) {
+var writeJsonFile = function writeJsonFile(filename, data) {
   _fs["default"].writeFileSync(filename, JSON.stringify(data, null, '\t'));
 
   console.log('Saved Successfully!');
 };
 
-exports.saveResults = saveResults;
+exports.writeJsonFile = writeJsonFile;

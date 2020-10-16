@@ -3,7 +3,10 @@ const path = require('path');
 
 const fetch = require('node-fetch');
 
-const { searchRedditPostsByTopicPromise } = require('../build/index');
+const { 
+  searchRedditPostsByTopicPromise,
+  getRedditUrl 
+} = require('../build/index');
 
 
 jest.mock('node-fetch');
@@ -22,25 +25,36 @@ describe('searchRedditPostsByTopicPromise', () => {
 
   describe('Data file', () => {
 
+    beforeEach(() => {
+      const directory = fs.readFileSync(path.resolve(__dirname, '../data.json'));
+
+      if (fs.existsSync(directory)) {
+        fs.unlinkSync(directory);
+      }
+      
+    });
+
     it('should create a data.json file', async () => {
+      await searchRedditPostsByTopicPromise('Gaming');
+
       const req = fs.readFileSync(path.resolve(__dirname, './testData.json'));
       const expectedData = JSON.parse(req);
 
-      await searchRedditPostsByTopicPromise('Gaming');
-
       const data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data.json')));
 
+      expect.assertions(1);
       expect(expectedData).toEqual(data);
     })
 
+  });
 
-    // it('data.json should exist', () => {
-    //   const directory = '../data.json';
-    //   const exist = fs.existsSync(path.resolve(__dirname, directory));
+  describe('Get Reddit Url', () => {
 
-    //   expect(exist).toBeTruthy();
-    // });
+    it('Should expect correct URL', () => {
+      const redditUrl = getRedditUrl('Gaming');
 
+      expect(redditUrl).toEqual('https://www.reddit.com/r/pics/search.json?q=Gaming&sort=new');
+    });
 
   });
 
