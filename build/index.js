@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.writeJsonFile = exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJsonData = exports.searchRedditPostsByTopicAsync = exports.searchRedditPostsByTopicPromise = void 0;
+exports.writeJsonFile = exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJson = exports.fetchRedditPostsByTopicAsync = exports.fetchRedditPostsByTopicPromise = void 0;
 
 var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
@@ -18,11 +18,12 @@ var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 var _fs = _interopRequireDefault(require("fs"));
 
 // Set the fetch -> json into a helper function instead of repeating them
-var searchRedditPostsByTopicPromise = function searchRedditPostsByTopicPromise(topic) {
+var fetchRedditPostsByTopicPromise = function fetchRedditPostsByTopicPromise(topic) {
   var fields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   var sort = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "new";
+  if (!Array.isArray(fields)) throw new Error('Field has to be an array!');
   var url = getRedditUrl(topic, sort);
-  fetchJsonData(url).then(function (res) {
+  return fetchJson(url).then(function (res) {
     return processData(res, fields);
   }).then(function (posts) {
     return writeJsonFile('data.json', posts);
@@ -31,9 +32,9 @@ var searchRedditPostsByTopicPromise = function searchRedditPostsByTopicPromise(t
   });
 };
 
-exports.searchRedditPostsByTopicPromise = searchRedditPostsByTopicPromise;
+exports.fetchRedditPostsByTopicPromise = fetchRedditPostsByTopicPromise;
 
-var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
+var fetchRedditPostsByTopicAsync = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(topic) {
     var fields,
         sort,
@@ -50,7 +51,7 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
             url = getRedditUrl(topic, sort);
             _context.prev = 3;
             _context.next = 6;
-            return fetchJsonData(url);
+            return fetchJson(url);
 
           case 6:
             data = _context.sent;
@@ -72,7 +73,7 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
     }, _callee, null, [[3, 11]]);
   }));
 
-  return function searchRedditPostsByTopicAsync(_x) {
+  return function fetchRedditPostsByTopicAsync(_x) {
     return _ref.apply(this, arguments);
   };
 }(); // Pass all the data into specify fields
@@ -81,9 +82,9 @@ var searchRedditPostsByTopicAsync = /*#__PURE__*/function () {
 // Could add a function Process data and use specify/extract fields in it
 
 
-exports.searchRedditPostsByTopicAsync = searchRedditPostsByTopicAsync;
+exports.fetchRedditPostsByTopicAsync = fetchRedditPostsByTopicAsync;
 
-var fetchJsonData = function fetchJsonData(url) {
+var fetchJson = function fetchJson(url) {
   return (0, _nodeFetch["default"])(url).then(function (res) {
     return res.json();
   })["catch"](function (err) {
@@ -91,7 +92,7 @@ var fetchJsonData = function fetchJsonData(url) {
   });
 };
 
-exports.fetchJsonData = fetchJsonData;
+exports.fetchJson = fetchJson;
 
 var processData = function processData(res, fields) {
   var _res$data;
@@ -102,11 +103,14 @@ var processData = function processData(res, fields) {
 
 exports.processData = processData;
 
-var extractFields = function extractFields(data, fields) {
+var extractFields = function extractFields(data) {
+  var fields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   if (!fields.length || !fields) return data;
   return data.map(function (obj) {
     if ((0, _typeof2["default"])(obj) === 'object') {
       return fields.reduce(function (acc, field) {
+        if (typeof field !== 'string') throw new Error("".concat(field, " is not a string"));
+
         if ((obj === null || obj === void 0 ? void 0 : obj.data[field]) !== undefined) {
           acc[field] = obj === null || obj === void 0 ? void 0 : obj.data[field];
         }
@@ -121,8 +125,8 @@ exports.extractFields = extractFields;
 
 var getRedditUrl = function getRedditUrl(topic) {
   var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "new";
-  if (!topic && typeof topic !== 'string') return new Error('Topic not a string!');
-  if (typeof sort !== 'string') return new Error('Sort is not a string!');
+  if (!topic || typeof topic !== 'string') throw new Error('Topic not a string!');
+  if (typeof sort !== 'string') throw new Error('Sort is not a string!');
   return "https://www.reddit.com/r/pics/search.json?q=".concat(topic, "&sort=").concat(sort);
 };
 
