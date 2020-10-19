@@ -4,7 +4,7 @@ const path = require('path');
 const nock = require('nock');
 
 const { 
-  fetchRedditPostsByTopicPromise,
+  fetchRedditPostsByTopic,
   getRedditUrl,
   extractFields,
   fetchJson
@@ -44,7 +44,7 @@ describe('fetchRedditPostsByTopicPromise', () => {
         .get('/r/pics/search.json?q=Gaming&sort=new')
         .reply(200, response);
 
-      const request = await fetchRedditPostsByTopicPromise('Gaming');
+      const request = await fetchRedditPostsByTopic('Gaming');
 
       expect(request).toEqual(children);
     });
@@ -58,7 +58,7 @@ describe('fetchRedditPostsByTopicPromise', () => {
         .get('/r/pics/search.json?q=Gaming&sort=new')
         .reply(200, response);
 
-      const request = await fetchRedditPostsByTopicPromise('Gaming', fields);
+      const request = await fetchRedditPostsByTopic('Gaming', fields);
 
       const expectedResponse = extractFields(children, fields);
 
@@ -81,7 +81,7 @@ describe('fetchRedditPostsByTopicPromise', () => {
 
   });
 
-  describe('extract fields', () => {
+  describe('Extract fields', () => {
     it('should return correct value', () => {
       const arrayOfObj = [{
         data: {

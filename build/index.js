@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJson = exports.fetchRedditPostsByTopicAsync = exports.fetchRedditPostsByTopicPromise = void 0;
+exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJson = exports.fetchRedditPostsByTopic = void 0;
 
 var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
@@ -15,27 +15,12 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 
-var fetchRedditPostsByTopicPromise = function fetchRedditPostsByTopicPromise(topic) {
-  var fields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  var sort = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "new";
-  if (!Array.isArray(fields)) throw new Error('Field has to be an array!');
-  var url = getRedditUrl(topic, sort);
-  return fetchJson(url).then(function (res) {
-    return processData(res, fields);
-  })["catch"](function (err) {
-    return console.error('Error: ', err);
-  });
-};
-
-exports.fetchRedditPostsByTopicPromise = fetchRedditPostsByTopicPromise;
-
-var fetchRedditPostsByTopicAsync = /*#__PURE__*/function () {
+var fetchRedditPostsByTopic = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(topic) {
     var fields,
         sort,
         url,
-        data,
-        posts,
+        res,
         _args = arguments;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -43,35 +28,43 @@ var fetchRedditPostsByTopicAsync = /*#__PURE__*/function () {
           case 0:
             fields = _args.length > 1 && _args[1] !== undefined ? _args[1] : [];
             sort = _args.length > 2 && _args[2] !== undefined ? _args[2] : "new";
+
+            if (Array.isArray(fields)) {
+              _context.next = 4;
+              break;
+            }
+
+            throw new Error('Field has to be an array!');
+
+          case 4:
             url = getRedditUrl(topic, sort);
-            _context.prev = 3;
-            _context.next = 6;
+            _context.prev = 5;
+            _context.next = 8;
             return fetchJson(url);
 
-          case 6:
-            data = _context.sent;
-            posts = processData(data, fields);
-            return _context.abrupt("return", posts);
+          case 8:
+            res = _context.sent;
+            return _context.abrupt("return", processData(res, fields));
 
-          case 11:
-            _context.prev = 11;
-            _context.t0 = _context["catch"](3);
-            console.error(_context.t0);
+          case 12:
+            _context.prev = 12;
+            _context.t0 = _context["catch"](5);
+            return _context.abrupt("return", console.error('Error: ', _context.t0));
 
-          case 14:
+          case 15:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[3, 11]]);
+    }, _callee, null, [[5, 12]]);
   }));
 
-  return function fetchRedditPostsByTopicAsync(_x) {
+  return function fetchRedditPostsByTopic(_x) {
     return _ref.apply(this, arguments);
   };
 }();
 
-exports.fetchRedditPostsByTopicAsync = fetchRedditPostsByTopicAsync;
+exports.fetchRedditPostsByTopic = fetchRedditPostsByTopic;
 
 var fetchJson = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(url) {
