@@ -1,14 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+import nock from 'nock';
 
-const nock = require('nock');
-
-const { 
-  fetchRedditPostsByTopic,
-  getRedditUrl,
-  extractFields,
-  fetchJson
-} = require('../build/index');
+import fetchRedditPostsByTopic, { fetchJson, extractFields, getRedditUrl } from '../lib/index.js';
 
 describe('fetchRedditPostsByTopicPromise', () => {
 
