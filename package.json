@@ -1,5 +1,5 @@
 {
-  "name": "get-reddit-posts-by-topic",
+  "name": "fetch-reddit-posts-by-topic",
   "version": "1.0.0",
   "description": "Get posts from reddit based off the topic.",
   "main": "build/index.js",

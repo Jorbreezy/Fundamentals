@@ -6,7 +6,7 @@ describe('fetchRedditPostsByTopicPromise', () => {
 
   describe('Fetch json', () => {
 
-    const response = { 
+    const mockResponse = { 
       data: { 
         children: [
           { data: { id: 1, title: 'RTX 3080 Crashes', thumbnail: 'self', subreddit: 'Nvidia', ups: 635, downs: 34 } },
@@ -25,16 +25,17 @@ describe('fetchRedditPostsByTopicPromise', () => {
         .get('/r/pics/search.json?q=Gaming&sort=new')
         .reply(200, responseData);
 
-      return await fetchJson(redditUrl)
-        .then(res => expect(res).toEqual(responseData));
+      const request = await fetchJson(redditUrl);
+        
+      expect(request).toEqual(responseData);
     });
 
     it('Should return a certain response when only topic is passed', async () => {
-      const { data: { children } } = response;
+      const { data: { children } } = mockResponse;
 
       nock('https://www.reddit.com')
         .get('/r/pics/search.json?q=Gaming&sort=new')
-        .reply(200, response);
+        .reply(200, mockResponse);
 
       const request = await fetchRedditPostsByTopic('Gaming');
 
@@ -44,15 +45,17 @@ describe('fetchRedditPostsByTopicPromise', () => {
     it('Should return a certain response when topic and fields is passed', async () => {
       const fields = ['id', 'title'];
 
-      const { data: { children } } = response;
-
       nock('https://www.reddit.com')
         .get('/r/pics/search.json?q=Gaming&sort=new')
-        .reply(200, response);
+        .reply(200, mockResponse);
 
       const request = await fetchRedditPostsByTopic('Gaming', fields);
 
-      const expectedResponse = extractFields(children, fields);
+      const expectedResponse = [
+            { id: 1, title: 'RTX 3080 Crashes' } ,
+            { id: 2, title: 'Cyberpunk 2077 goes gold'  },
+            { id: 3, title: 'PS5 release data' } 
+          ];
 
       expect(request).toEqual(expectedResponse);
     });
