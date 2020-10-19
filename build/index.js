@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJson = exports.fetchRedditPostsByTopic = void 0;
+exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJson = exports["default"] = void 0;
 
 var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
@@ -15,7 +15,7 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 
-var fetchRedditPostsByTopic = /*#__PURE__*/function () {
+var _default = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(topic) {
     var fields,
         sort,
@@ -59,12 +59,12 @@ var fetchRedditPostsByTopic = /*#__PURE__*/function () {
     }, _callee, null, [[5, 12]]);
   }));
 
-  return function fetchRedditPostsByTopic(_x) {
+  return function (_x) {
     return _ref.apply(this, arguments);
   };
 }();
 
-exports.fetchRedditPostsByTopic = fetchRedditPostsByTopic;
+exports["default"] = _default;
 
 var fetchJson = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(url) {
