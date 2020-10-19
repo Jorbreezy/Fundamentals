@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const fetch = require('node-fetch');
 const nock = require('nock');
 
 const { 
@@ -15,22 +14,55 @@ describe('fetchRedditPostsByTopicPromise', () => {
 
   describe('Fetch json', () => {
 
-    // Parent function expects a certain response when url is requested
+    const response = { 
+      data: { 
+        children: [
+          { data: { id: 1, title: 'RTX 3080 Crashes', thumbnail: 'self', subreddit: 'Nvidia', ups: 635, downs: 34 } },
+          { data: { id: 2, title: 'Cyberpunk 2077 goes gold', thumbnail: 'self', subreddit: 'Nvidia', ups: 1124, downs: 450 } },
+          { data: { id: 3, title: 'PS5 release data', thumbnail: 'self', subreddit: 'Nvidia', ups: 12903 , downs: 2415 } }
+        ] 
+      } 
+    };
 
-    // Should return a parsed json response
     it('Should match returned data', async () => {
-      const redditUrl = 'https://reddit.com/r/pics/search.json?=Gaming&sort=new';
+      const redditUrl = 'https://reddit.com/r/pics/search.json?q=Gaming&sort=new';
 
-      const response = { data: { children: [{ title: 'RTX 3080 Crashes' }] } };
+      const responseData = { data: { children: [{ title: 'RTX 3080 Crashes' }] } };
 
       nock('https://reddit.com')
-        .get('/r/pics/search.json?=Gaming&sort=new')
+        .get('/r/pics/search.json?q=Gaming&sort=new')
+        .reply(200, responseData);
+
+      return await fetchJson(redditUrl)
+        .then(res => expect(res).toEqual(responseData));
+    });
+
+    it('Should return a certain response when only topic is passed', async () => {
+      const { data: { children } } = response;
+
+      nock('https://www.reddit.com')
+        .get('/r/pics/search.json?q=Gaming&sort=new')
         .reply(200, response);
 
-      const request = await fetchJson(redditUrl)
-        .then(res => res);
+      const request = await fetchRedditPostsByTopicPromise('Gaming');
 
-        expect(request).toEqual(response);
+      expect(request).toEqual(children);
+    });
+
+    it('Should return a certain response when topic and fields is passed', async () => {
+      const fields = ['id', 'title'];
+
+      const { data: { children } } = response;
+
+      nock('https://www.reddit.com')
+        .get('/r/pics/search.json?q=Gaming&sort=new')
+        .reply(200, response);
+
+      const request = await fetchRedditPostsByTopicPromise('Gaming', fields);
+
+      const expectedResponse = extractFields(children, fields);
+
+      expect(request).toEqual(expectedResponse);
     });
 
   });
@@ -80,7 +112,5 @@ describe('fetchRedditPostsByTopicPromise', () => {
       expect(() => extractFields(arrayOfObj, [1, 2, 3])).toThrowError();
     });
   });
-
-
 
 });

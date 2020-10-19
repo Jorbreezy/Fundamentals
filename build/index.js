@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.writeJsonFile = exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJson = exports.fetchRedditPostsByTopicAsync = exports.fetchRedditPostsByTopicPromise = void 0;
+exports.getRedditUrl = exports.extractFields = exports.processData = exports.fetchJson = exports.fetchRedditPostsByTopicAsync = exports.fetchRedditPostsByTopicPromise = void 0;
 
 var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
@@ -15,9 +15,6 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 
-var _fs = _interopRequireDefault(require("fs"));
-
-// Set the fetch -> json into a helper function instead of repeating them
 var fetchRedditPostsByTopicPromise = function fetchRedditPostsByTopicPromise(topic) {
   var fields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   var sort = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "new";
@@ -25,8 +22,6 @@ var fetchRedditPostsByTopicPromise = function fetchRedditPostsByTopicPromise(top
   var url = getRedditUrl(topic, sort);
   return fetchJson(url).then(function (res) {
     return processData(res, fields);
-  }).then(function (posts) {
-    return writeJsonFile('data.json', posts);
   })["catch"](function (err) {
     return console.error('Error: ', err);
   });
@@ -56,9 +51,7 @@ var fetchRedditPostsByTopicAsync = /*#__PURE__*/function () {
           case 6:
             data = _context.sent;
             posts = processData(data, fields);
-            writeJsonFile('data.json', posts);
-            _context.next = 14;
-            break;
+            return _context.abrupt("return", posts);
 
           case 11:
             _context.prev = 11;
@@ -76,21 +69,38 @@ var fetchRedditPostsByTopicAsync = /*#__PURE__*/function () {
   return function fetchRedditPostsByTopicAsync(_x) {
     return _ref.apply(this, arguments);
   };
-}(); // Pass all the data into specify fields
-// Extract Fields
-// Allow it to be specific to an array of objects
-// Could add a function Process data and use specify/extract fields in it
-
+}();
 
 exports.fetchRedditPostsByTopicAsync = fetchRedditPostsByTopicAsync;
 
-var fetchJson = function fetchJson(url) {
-  return (0, _nodeFetch["default"])(url).then(function (res) {
-    return res.json();
-  })["catch"](function (err) {
-    return console.error(err);
-  });
-};
+var fetchJson = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(url) {
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return (0, _nodeFetch["default"])(url).then(function (res) {
+              return res.json();
+            })["catch"](function (err) {
+              return console.error(err);
+            });
+
+          case 2:
+            return _context2.abrupt("return", _context2.sent);
+
+          case 3:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function fetchJson(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
 
 exports.fetchJson = fetchJson;
 
@@ -125,18 +135,10 @@ var extractFields = function extractFields(data) {
 exports.extractFields = extractFields;
 
 var getRedditUrl = function getRedditUrl(topic) {
-  var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "new";
+  var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'new';
   if (!topic || typeof topic !== 'string') throw new Error('Topic not a string!');
   if (typeof sort !== 'string') throw new Error('Sort is not a string!');
   return "https://www.reddit.com/r/pics/search.json?q=".concat(topic, "&sort=").concat(sort);
 };
 
 exports.getRedditUrl = getRedditUrl;
-
-var writeJsonFile = function writeJsonFile(filename, data) {
-  _fs["default"].writeFileSync(filename, JSON.stringify(data, null, '\t'));
-
-  console.log('Saved Successfully!');
-};
-
-exports.writeJsonFile = writeJsonFile;
