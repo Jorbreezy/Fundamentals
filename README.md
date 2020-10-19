@@ -7,33 +7,24 @@ This contains a Reddit posts search function
 
 ## Getting Started
 
-### Clone Repository
+### Install
 ```
-git clone https://github.com/Jorbreezy/Project-1.git
+npm install --save fetch-reddit-posts-by-topic
 ``` 
-### Install Dependencies
-```
-npm install
-``` 
-### Build project
-```
-npm run build
-```
-
 ## Reddit Posts search function
 This is a function that allows you to search for posts related to the topic given e.g 'Gaming, Programming, etc'. The output of it is a JSON file which saves the data from your search.
 
 ### How to use
-Just import or require the file where you need it. It defaults to the function.
+Just import or require the package where you need it.
 
 ```
-import searchRedditPostsByTopic from 'searchRedditPostsByTopic';
+import fetchRedditPostsByTopic from 'fetch-reddit-posts-by-topic';
 
 or
 
-const searchRedditPostsByTopic = require('searchRedditPostsByTopic');
+const fetchhRedditPostsByTopic = require('fetch-reddit-posts-by-topic');
 
-searchRedditPostsByTopic('Gaming', ['thumbnail','id'], 'Best');
+searchRedditPostsByTopic('Gaming', ['thumbnail','id']);
 ```
 
 ### Arguments
@@ -41,5 +32,5 @@ The function takes three arguments, topic, fields, and sort. Field is an array o
 The types of sorts available are "New, Best, Relevance, Hot and Comments".
 
 ```
-searchRedditPostsByTopic('Gaming', ['thumbnail','id'])
+searchRedditPostsByTopic('Gaming', ['thumbnail','id'], 'Best')
 ```
