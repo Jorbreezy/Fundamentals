@@ -105,7 +105,8 @@ exports.processData = processData;
 
 var extractFields = function extractFields(data) {
   var fields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  if (!fields.length || !fields) return data;
+  if (!Array.isArray(data)) throw new Error('Data is not an array');
+  if (!fields.length) return data;
   return data.map(function (obj) {
     if ((0, _typeof2["default"])(obj) === 'object') {
       return fields.reduce(function (acc, field) {
