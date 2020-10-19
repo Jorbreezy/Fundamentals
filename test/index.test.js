@@ -11,34 +11,15 @@ const {
   fetchJson
 } = require('../build/index');
 
-jest.mock('node-fetch');
-
-fetch.mockImplementation(async (url) => {
-
-  const req = fs.readFileSync(path.resolve(__dirname, './testData.json'));
-  const data = JSON.parse(req);
-
-  return new Promise((resolve) => {
-    resolve({ json: () => Promise.resolve({ data: { children: data } }) });
-  });
-});
-
 describe('fetchRedditPostsByTopicPromise', () => {
 
   describe('Fetch json', () => {
 
-    beforeEach(() => {
-      // fetchMock.mock('https://reddit.com/r/pics/search.json?=Gaming&sort=new', 200);
-      nock.disableNetConnect();
-    });
+    // Parent function expects a certain response when url is requested
 
-    afterAll(nock.restore);
-    afterEach(nock.cleanAll);
-
+    // Should return a parsed json response
     it('Should match returned data', async () => {
       const redditUrl = 'https://reddit.com/r/pics/search.json?=Gaming&sort=new';
-
-      nock.disableNetConnect();
 
       const response = { data: { children: [{ title: 'RTX 3080 Crashes' }] } };
 
@@ -46,50 +27,10 @@ describe('fetchRedditPostsByTopicPromise', () => {
         .get('/r/pics/search.json?=Gaming&sort=new')
         .reply(200, response);
 
-      console.log('Active Mocks', nock.isActive());
-
-      const request = await fetch(redditUrl)
-        .then(res => res.json())
+      const request = await fetchJson(redditUrl)
         .then(res => res);
 
         expect(request).toEqual(response);
-    });
-
-  });
-
-  describe('Json file', () => {
-
-    beforeEach(() => {
-      const directory = fs.readFileSync(path.resolve(__dirname, '../data.json'));
-
-      if (fs.existsSync(directory)) {
-        fs.unlinkSync(directory);
-      }
-      
-    });
-
-    it('should create a data.json file', async () => {
-      await fetchRedditPostsByTopicPromise('Gaming');
-
-      const req = fs.readFileSync(path.resolve(__dirname, './testData.json'));
-      const expectedData = JSON.parse(req);
-
-      const data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data.json')));
-
-      expect.assertions(1);
-      expect(expectedData).toEqual(data);
-    });
-
-    it('Should match the filtered data', async () => {
-      await fetchRedditPostsByTopicPromise('Gaming', ['id', 'title', 'thumbnail']);
-
-      const req = fs.readFileSync(path.resolve(__dirname, './testFilteredData.json'));
-      const expectedData = JSON.parse(req);
-
-      const data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data.json')));
-
-      expect.assertions(1);
-      expect(expectedData).toEqual(data);
     });
 
   });
@@ -139,5 +80,7 @@ describe('fetchRedditPostsByTopicPromise', () => {
       expect(() => extractFields(arrayOfObj, [1, 2, 3])).toThrowError();
     });
   });
+
+
 
 });
