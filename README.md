@@ -1,7 +1,5 @@
 # Reddit Posts Search
-A project focused on learning the fundamentals of js and node.
-
-This contains a Reddit posts search function
+A reddit post search function.
 
 # Documentation
 
