@@ -1,6 +1,10 @@
 import fetch from 'node-fetch';
 
-export default async (topic, fields = [], sort = "new") => {
+import Json from './interfaces/Json';
+import Children from './interfaces/Children';
+import ChildrenObject from './interfaces/ChildrenObject';
+
+export default async (topic: string, fields: string[] = [], sort: string = "new") => {
   if (!Array.isArray(fields)) throw new Error('Field has to be an array!');
 
   const url = getRedditUrl(topic, sort);
@@ -13,19 +17,19 @@ export default async (topic, fields = [], sort = "new") => {
   }
 }
 
-export const fetchJson = async (url) => {
+export const fetchJson = async (url: string) => {
   return await fetch(url)
     .then(res => res.json())
     .catch(err => console.error(err))
 }
 
-export const processData = (res, fields) => {
-  const data = res?.data?.children || [];
+export const processData = (res: Json, fields: string[]) => {
+  const data: Children = res?.data?.children;
 
   return extractFields(data, fields);
 }
 
-export const extractFields = (data, fields = []) => {
+export const extractFields = (data: Children, fields: string[] = []) => {
   if (!Array.isArray(data)) throw new Error('Data is not an array')
   if (!fields.length) return data;
 
@@ -46,7 +50,7 @@ export const extractFields = (data, fields = []) => {
 
 }
 
-export const getRedditUrl = (topic, sort = 'new') => {
+export const getRedditUrl = (topic: string, sort: string = 'new') => {
   if (!topic || typeof topic !== 'string') throw new Error('Topic not a string!');
   if (typeof sort !== 'string') throw new Error('Sort is not a string!'); 
 

@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "outDir": "./build",
+        "allowJs": true,
+        "target": "ES5",
+        "noImplicitAny": true
+    },
+    "include": [
+        "./lib/**/*"
+    ],
+    "exclude": ["node_modules", "./tests/*", "build"]
+}
