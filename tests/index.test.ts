@@ -1,6 +1,8 @@
 import nock from 'nock';
 
-import fetchRedditPostsByTopic, { fetchJson, extractFields, getRedditUrl } from '../build/index.js';
+import fetchRedditPostsByTopic, { fetchJson, extractFields, getRedditUrl } from '../lib/index';
+
+import Posts, { Post } from '../lib/interfaces/Posts';
 
 describe('fetchRedditPostsByTopicPromise', () => {
 
@@ -78,13 +80,7 @@ describe('fetchRedditPostsByTopicPromise', () => {
 
   describe('Extract fields', () => {
     it('should return correct value', () => {
-      const arrayOfObj = [{
-        data: {
-          name: 'Jordan Kelly',
-          occupation: 'Software Engineer',
-          company: 'Econify'
-        }
-      }];
+      const arrayOfObj: MocKPosts = [;
 
       const extractedFields = extractFields(arrayOfObj, ['name', 'occupation']);
 
@@ -96,15 +92,19 @@ describe('fetchRedditPostsByTopicPromise', () => {
     });
 
     it('should throw error of fields contains a type other than a string', () => {
-      const arrayOfObj = [{
-        data: {
-          name: 'Jordan Kelly',
-          occupation: 'Software Engineer',
-          company: 'Econify'
-        }
-      }];
+      const mockPost: Partial<Post> = {
+        title: '',
+        author: '',
+        subreddit: ''
+      }
+      
+      const mockPosts: Posts = {
+        children: [{
+          data: mockPost
+        }]
+      };
 
-      expect(() => extractFields(arrayOfObj, [1, 2, 3])).toThrowError();
+      expect(() => extractFields(mockPosts, [1, 2, 3])).toThrowError();
     });
   });
 
