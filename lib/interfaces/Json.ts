@@ -1,10 +1,6 @@
-import Posts from './Posts';
+import { Posts } from './Posts';
 
-export default interface Json {
+export interface Json {
     kind: string,
-    data: Data
-}
-
-interface Data {
-    children: Posts
+    data: Posts
 }

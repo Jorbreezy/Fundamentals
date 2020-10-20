@@ -1,16 +1,20 @@
-export default interface Posts {
-    children?: SubredditPostData[] | []
+export interface Posts {
+    children?: SubredditPostData[];
 }
 
 export interface SubredditPostData {
     data: Post
 }
   
-export interface Post {
+interface PostKeys {
+    [key: string]: any
+}
+
+export interface Post extends PostKeys {
     subreddit?: string,
     author?: string,
-    thumbnail?: string,
     title?: string,
+    thumbnail?: string,
     ups?: number,
     downs?: number,
     created?: number,
