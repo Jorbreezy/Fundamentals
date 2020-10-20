@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-import { Json } from './interfaces/Json';
-import {Posts, Post, SubredditPostData } from './interfaces/Posts';
+import { RedditResponse } from './interfaces/RedditResponse';
+import { Post, SubredditPostData } from './interfaces/Posts';
 
 export default async (topic: string, fields: string[] = [], sort: string = "new") => {
   if (!Array.isArray(fields)) throw new Error('Field has to be an array!');
@@ -22,7 +22,7 @@ export const fetchJson = async (url: string) => {
     .catch(err => console.error(err))
 }
 
-export const processData = (res: Json, fields: string[]) => {
+export const processData = (res: RedditResponse, fields: string[]) => {
   const data: SubredditPostData[] = res?.data?.children || [];
 
   return extractFields(data, fields);

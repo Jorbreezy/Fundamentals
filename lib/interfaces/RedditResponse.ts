@@ -1,6 +1,6 @@
 import { Posts } from './Posts';
 
-export interface Json {
+export interface RedditResponse {
     kind: string,
     data: Posts
 }
