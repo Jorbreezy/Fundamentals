@@ -1,8 +1,7 @@
 import fetch from 'node-fetch';
 
 import Json from './interfaces/Json';
-import Children from './interfaces/Children';
-import ChildrenObject from './interfaces/ChildrenObject';
+import Posts, { Post } from './interfaces/Posts';
 
 export default async (topic: string, fields: string[] = [], sort: string = "new") => {
   if (!Array.isArray(fields)) throw new Error('Field has to be an array!');
@@ -24,12 +23,12 @@ export const fetchJson = async (url: string) => {
 }
 
 export const processData = (res: Json, fields: string[]) => {
-  const data: Children = res?.data?.children;
+  const data: Posts = res?.data?.children;
 
   return extractFields(data, fields);
 }
 
-export const extractFields = (data: Children, fields: string[] = []) => {
+export const extractFields = (data: Posts, fields: string[] = []) => {
   if (!Array.isArray(data)) throw new Error('Data is not an array')
   if (!fields.length) return data;
 
@@ -39,12 +38,17 @@ export const extractFields = (data: Children, fields: string[] = []) => {
       return fields.reduce((acc, field) => {
         if (typeof field !== 'string') throw new Error(`${field} is not a string`);
 
+        let newObject: Post = { ...acc };
+
         if (obj?.data[field] !== undefined) {
-          acc[field] = obj?.data[field];
+          newObject = { 
+            ...acc,
+            [field]: obj?.data[field]
+          };
         }
   
-        return acc;
-      }, {});
+        return newObject;
+      }, {} as Post);
     }
   });
 

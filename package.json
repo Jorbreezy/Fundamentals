@@ -5,8 +5,8 @@
   "main": "build/index.js",
   "scripts": {
     "test": "jest",
-    "build": "babel lib --out-dir build",
-    "start": "babel lib --watch --out-dir build"
+    "build": "tsc -p ./lib",
+    "start": "tsc --watch"
   },
   "author": "Jordan Kelly",
   "license": "ISC",

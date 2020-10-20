@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import fetchRedditPostsByTopic, { fetchJson, extractFields, getRedditUrl } from '../lib/index.js';
+import fetchRedditPostsByTopic, { fetchJson, extractFields, getRedditUrl } from '../build/index.js';
 
 describe('fetchRedditPostsByTopicPromise', () => {
 

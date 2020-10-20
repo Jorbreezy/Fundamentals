@@ -1,8 +1,12 @@
-export default interface ChildrenObject {
-  data: ChildrenDataObject
+export default interface Posts {
+    children?: SubredditPostData[] | []
 }
 
-interface ChildrenDataObject {
+interface SubredditPostData {
+    data: Post
+}
+  
+export interface Post {
     subreddit: string,
     author: string,
     thumbnail: string,

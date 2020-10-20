@@ -1,4 +1,4 @@
-import Children from './Children';
+import Posts from './Posts';
 
 export default interface Json {
     kind: string,
@@ -6,5 +6,5 @@ export default interface Json {
 }
 
 interface Data {
-    children: Children
+    children: Posts
 }
