@@ -1,5 +1,8 @@
 # Reddit Posts Search
+
 This is a function that allows you to search for reddit posts related to the topic given e.g 'Gaming, Programming, etc'. Returns an array of objects that contains the information you need.
+
+This contains a Reddit posts search function
 
 # Documentation
 
@@ -11,7 +14,6 @@ npm install --save fetch-reddit-posts-by-topic
 ``` 
 ## How to use
 Just import or require the package where you need it.
-
 ```
 import fetchRedditPostsByTopic from 'fetch-reddit-posts-by-topic';
 
